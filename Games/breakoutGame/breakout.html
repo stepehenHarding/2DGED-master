@@ -8,17 +8,37 @@
         </style>
     </head>
     <body>
-        <canvas id= "main_canvas" width="1080" height="720"></canvas>
 
+        <canvas id="myCanvas" width="1080" height="720"></canvas>
+        
         <script>
-            var canvas =document.getElementById("main_canvas");
+            var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
-            
+            var x = canvas.width/2;
+            var y = canvas.height-30;
+            var dx = 2;
+            var dy = -2;
 
+            var ballRadius = 10;
             
-
+        // creates the ball
+            function drawBall() {
+                ctx.beginPath();
+                ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+                ctx.fillStyle = "#eeeeee";
+                ctx.fill();
+                ctx.closePath();
+            }
+        //clears the canvas then draws the ball
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawBall();
+                x += dx;
+                y += dy;
+            }
+        //calls the draw dunction every 10 millisecounds    
+            setInterval(draw, 7);
         </script>
         
     </body>
-
 </html>
