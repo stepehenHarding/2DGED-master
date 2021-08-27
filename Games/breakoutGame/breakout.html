@@ -2,12 +2,12 @@
 <html>
     <head>
         <title>breakout</title>
-        <style>
-            * {padding:0; margin: 0;}
-            canvas {background: rgb(59, 59, 59);display:block;margin:0auto;}
-        </style>
+            <link rel="stylesheet" href="css/styles.css">
     </head>
     <body>
+        <div id="parent_container">
+            <canvas id="main_canvas"></canvas>
+        </div>
 
         <canvas id="myCanvas" width="1080" height="720"></canvas>
       
@@ -202,18 +202,14 @@
                     {
                         if (x<paddleX+paddleWidth/2){
                             dy=-dy;
-                            dx=-2;
-                            fxWall.play();
+                            dx=-2;   
                         }
                         if(x>paddleX+paddleWidth/2){
                             dy=-dy;
                             dx=2;
-                            fxPowerUp.play();
-
                         }
-                    
-                        
-                        
+                        fxPop.play();
+
                         ballColor = "ffffff";
                         //fxPaddle.play();
                     }
