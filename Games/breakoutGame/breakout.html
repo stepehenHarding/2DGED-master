@@ -30,6 +30,7 @@
             var rightPressed = false;
             var leftPressed = false;
             var paddleSpeed = 7;
+            var paddleColor ="ffffff";
             //create the bricks
             var brickRowCount =6;
             var brickColumnCount=12;
@@ -46,7 +47,7 @@
             var fxWall= new Audio("assets/sounds/wall.flac");
             var fxPaddle = new Audio("assets/sounds/paddle.wav");
             var fxLooseLife = new Audio("assets/sounds/looseLife.wav");
-            var fxPowerUp = new Audio("assets/sound/powerUp.wav");
+            var fxPowerUp = new Audio("assets/sounds/powerUp.wav");
           
              
 
@@ -64,10 +65,14 @@
                 if (randomNum == 1)
                 {
                     paddleWidth =paddleWidth+50;
-                    fxPowerUp.play();
-                                
+                    fxPowerUp.play();               
+                }
+                else{
+                    fxPop.play();
                 }
             }
+
+      
 
             
 
@@ -87,9 +92,7 @@
                             b.status=0;
                             // ball changes color when it hits a block
                             ballColor="#88c288";
-                            fxPop.play();
                             paddleGrow();
-                           
                             score++;
                             if(score == brickRowCount*brickColumnCount){
                                 alert("YOU WIN, CONGRATULATIONS!\nYour Score="+score);
@@ -151,7 +154,7 @@
             function drawPaddle(){
                 ctx.beginPath();
                 ctx.rect(paddleX, canvas.height-paddleHeight,paddleWidth,paddleHeight);
-                ctx.fillStyle = "#eeeeee"
+                ctx.fillStyle = paddleColor
                 ctx.fill();
                 ctx.closePath();
             }
@@ -197,13 +200,27 @@
                 {
                     if(x>paddleX && x< paddleX +paddleWidth)
                     {
-                        dy=-dy;
+                        if (x<paddleX+paddleWidth/2){
+                            dy=-dy;
+                            dx=-2;
+                            fxWall.play();
+                        }
+                        if(x>paddleX+paddleWidth/2){
+                            dy=-dy;
+                            dx=2;
+                            fxPowerUp.play();
+
+                        }
+                    
+                        
+                        
                         ballColor = "ffffff";
-                        fxPaddle.play();
+                        //fxPaddle.play();
                     }
                     else
                     {
                         lives--;
+                        paddleWidth=75;
                         if(!lives){
                         alert("GAME OVER\nYour Score="+score);
                         document.location.reload();
