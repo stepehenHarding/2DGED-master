@@ -16,6 +16,7 @@
         <script>
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
+            //creates ball
             var ballRadius = 10;
             var ballColor = "ffffff";
             var x = canvas.width/2;
@@ -26,7 +27,7 @@
             var paddleHeight = 10;
             var paddleWidth = 75;
             var paddleX =(canvas.width-paddleWidth)/2;
-            //booleans made for creating controls
+            //booleans made for creating paddle controls
             var rightPressed = false;
             var leftPressed = false;
             var paddleSpeed = 7;
@@ -43,14 +44,15 @@
             var lives =3;
             
             //load sounds
+            //all sounds found on https://mixkit.co/free-sound-effects/game/
             var fxPop = new Audio("assets/sounds/pop.wav");
             var fxWall= new Audio("assets/sounds/wall.flac");
             var fxPaddle = new Audio("assets/sounds/paddle.wav");
             var fxLooseLife = new Audio("assets/sounds/looseLife.wav");
             var fxPowerUp = new Audio("assets/sounds/powerUp.wav");
-          
-             
+            var fxWin = new Audio("assets/sounds/win.wav");
 
+            //creates an array filled with an array, setting the status to 1 here allows us to turn it off when hit     
             var bricks =[];
             for (var c=0; c<brickColumnCount; c++){
                 bricks[c]=[];
@@ -72,29 +74,25 @@
                 }
             }
 
-      
-
-            
-
             //lisens for key being pressed and released    
             document.addEventListener("keydown",keyDownHandler,false);
             document.addEventListener("keyup",keyUpHandler,false);
             document.addEventListener("mousemove",mouseMoveHandler,false);
-
+            
             function collisionDetection(){
                 for(var c=0; c<brickColumnCount; c++){
                     for(var r=0; r<brickRowCount; r++){
                         var b= bricks[c][r];
-                        if(b.status==1)
-                        {
+                        if(b.status==1){
+                            // checks if ball hits block then changes its color
                             if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight){
                             dy=-dy;
                             b.status=0;
-                            // ball changes color when it hits a block
                             ballColor="#88c288";
                             paddleGrow();
                             score++;
                             if(score == brickRowCount*brickColumnCount){
+                                fxWin.play();
                                 alert("YOU WIN, CONGRATULATIONS!\nYour Score="+score);
                                 document.location.reload();
                             }
@@ -103,7 +101,6 @@
                 }
             }
         }
-
             function drawScore(){
                 ctx.font ="16px Arial";
                 ctx.fillStyle ="ffffff";
@@ -115,7 +112,8 @@
                 ctx.fillStyle ="ssssss";
                 ctx.fillText("Lives:"+lives,canvas.width-65,20);
             }
-            //this sets the paddle to the mouses position then subtracts half the paddle to center it    
+            
+            //this sets the paddle to the mouses position then  subtracts half the paddle to center it   
             function mouseMoveHandler (e){
                 var relativeX=e.clientX - canvas.offsetLeft;
                 if(relativeX > 0&& relativeX < canvas.width){
@@ -157,6 +155,7 @@
                 ctx.fillStyle = paddleColor
                 ctx.fill();
                 ctx.closePath();
+                
             }
 
             function drawBricks() 
@@ -178,7 +177,7 @@
                 }
             }
 
-            //clears the canvas then draws the ball
+            //clears the canvas then draws everything , also tracks lives
             function draw() 
             {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -195,6 +194,7 @@
                 }
                 if(y+dy<ballRadius){
                     dy=-dy;
+                    fxWall.play();
                 }
                 else if(y+dy>canvas.height-ballRadius)
                 {
@@ -209,7 +209,6 @@
                             dx=2;
                         }
                         fxPop.play();
-
                         ballColor = "ffffff";
                         //fxPaddle.play();
                     }
@@ -220,7 +219,6 @@
                         if(!lives){
                         alert("GAME OVER\nYour Score="+score);
                         document.location.reload();
-                        
                         }
                         else {
                             fxLooseLife.play();
@@ -230,7 +228,6 @@
                             dy= -2;
                             paddleX = (canvas.width-paddleWidth)/2;
                         }
-                        
                     }
                 }
                 
@@ -243,14 +240,11 @@
                 {
                     paddleX-=7;
                 }
-                
                 x += dx;
                 y += dy;
                 requestAnimationFrame(draw);
-
             }   
             draw();
         </script>
-        
     </body>
 </html>
