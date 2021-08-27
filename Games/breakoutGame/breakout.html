@@ -10,7 +10,9 @@
     <body>
 
         <canvas id="myCanvas" width="1080" height="720"></canvas>
-        
+      
+
+ 
         <script>
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
@@ -22,7 +24,7 @@
             var dy = -2;
             //creates paddle
             var paddleHeight = 10;
-            var paddleWidth = 200;
+            var paddleWidth = 75;
             var paddleX =(canvas.width-paddleWidth)/2;
             //booleans made for creating controls
             var rightPressed = false;
@@ -36,9 +38,17 @@
             var brickPadding=10;
             var brickOffsetTop=30;
             var brickOffsetLeft=30;
-
             var score =0;
             var lives =3;
+            
+            //load sounds
+            var fxPop = new Audio("assets/sounds/pop.wav");
+            var fxWall= new Audio("assets/sounds/wall.flac");
+            var fxPaddle = new Audio("assets/sounds/paddle.wav");
+            var fxLooseLife = new Audio("assets/sounds/looseLife.wav");
+            var fxPowerUp = new Audio("assets/sound/powerUp.wav");
+          
+             
 
             var bricks =[];
             for (var c=0; c<brickColumnCount; c++){
@@ -47,6 +57,19 @@
                     bricks[c][r]= {x:0,y:0,status:1};
                 }
             }
+
+            //gets a random number ,if it = 1 paddle grows
+            function paddleGrow(){
+                var randomNum =Math.floor(Math.random()*10);
+                if (randomNum == 1)
+                {
+                    paddleWidth =paddleWidth+50;
+                    fxPowerUp.play();
+                                
+                }
+            }
+
+            
 
             //lisens for key being pressed and released    
             document.addEventListener("keydown",keyDownHandler,false);
@@ -64,6 +87,9 @@
                             b.status=0;
                             // ball changes color when it hits a block
                             ballColor="#88c288";
+                            fxPop.play();
+                            paddleGrow();
+                           
                             score++;
                             if(score == brickRowCount*brickColumnCount){
                                 alert("YOU WIN, CONGRATULATIONS!\nYour Score="+score);
@@ -93,8 +119,6 @@
                     paddleX = relativeX - paddleWidth/2;
                 }
             }
-
-
 
             // sets the booleans to true when key is pressed,let go.
             function keyDownHandler(e){
@@ -164,6 +188,7 @@
 
                 if(x +dx >canvas.width-ballRadius|| x + dx <ballRadius){
                     dx = -dx;
+                    fxWall.play();
                 }
                 if(y+dy<ballRadius){
                     dy=-dy;
@@ -174,6 +199,7 @@
                     {
                         dy=-dy;
                         ballColor = "ffffff";
+                        fxPaddle.play();
                     }
                     else
                     {
@@ -184,6 +210,7 @@
                         
                         }
                         else {
+                            fxLooseLife.play();
                             x = canvas.width/2;
                             y = canvas.height-30;
                             dx = 2;
