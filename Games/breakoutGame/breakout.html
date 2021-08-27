@@ -112,7 +112,7 @@
                 ctx.fillStyle ="ssssss";
                 ctx.fillText("Lives:"+lives,canvas.width-65,20);
             }
-            
+
             //this sets the paddle to the mouses position then  subtracts half the paddle to center it   
             function mouseMoveHandler (e){
                 var relativeX=e.clientX - canvas.offsetLeft;
@@ -202,15 +202,15 @@
                     {
                         if (x<paddleX+paddleWidth/2){
                             dy=-dy;
-                            dx=-2;   
+                            dx=(dx-2);   
                         }
                         if(x>paddleX+paddleWidth/2){
                             dy=-dy;
-                            dx=2;
+                            dx=(dx+2);
                         }
-                        fxPop.play();
+                        
                         ballColor = "ffffff";
-                        //fxPaddle.play();
+                        fxPaddle.play();
                     }
                     else
                     {
