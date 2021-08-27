@@ -51,6 +51,8 @@
             var fxLooseLife = new Audio("assets/sounds/looseLife.wav");
             var fxPowerUp = new Audio("assets/sounds/powerUp.wav");
             var fxWin = new Audio("assets/sounds/win.wav");
+            //found on var https://www.chosic.com/free-music/
+            var fxbackground = new Audio("assets/sounds/Art-Of-Silence_V2.mp3");
 
             //creates an array filled with an array, setting the status to 1 here allows us to turn it off when hit     
             var bricks =[];
@@ -187,6 +189,7 @@
                 drawScore();
                 drawLives();
                 collisionDetection();
+                fxbackground.play();
 
                 if(x +dx >canvas.width-ballRadius|| x + dx <ballRadius){
                     dx = -dx;
